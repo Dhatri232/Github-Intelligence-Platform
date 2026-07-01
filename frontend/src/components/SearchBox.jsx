@@ -1,105 +1,30 @@
-import AIAnalysis from "./AIAnalysis";
 import { useState } from "react";
-import RepoCard from "./RepoCard";
-import LanguageChart from "./LanguageChart";
 
-function SearchBox() {
+function SearchBox({ onSearch }) {
+  const [input, setInput] = useState("");
 
-    const [url, setUrl] = useState("");
-    const [repo, setRepo] = useState(null);
-    const [aiAnalysis, setAiAnalysis] = useState("");
-    const [languages, setLanguages] = useState(null);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input.trim()) onSearch(input);
+  };
 
-    const analyzeRepo = async () => {
-
-        const parts = url.split("/");
-
-        const owner = parts[3];
-        const repository = parts[4];
-
-        const response = await fetch("http://localhost:5000/analyze", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json",
-            },
-
-            body: JSON.stringify({
-                owner,
-                repo: repository,
-            }),
-
-        });
-
-        const data = await response.json();
-
-        setRepo(data);
-        const aiResponse = await fetch(
-    "http://localhost:5000/ai-analysis",
-    {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            owner,
-            repo: repository
-        })
-
-    }
-);
-
-const aiData = await aiResponse.json();
-
-setAiAnalysis(aiData.readme);
-
-        const languageResponse = await fetch(
-    "http://localhost:5000/languages",
-    {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            owner,
-            repo: repository
-        })
-
-    }
-);
-
-const languageData = await languageResponse.json();
-
-setLanguages(languageData);
-    };
-
-    return (
-
-        <div>
-
-            <input
-                type="text"
-                placeholder="https://github.com/facebook/react"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-            />
-
-            <button onClick={analyzeRepo}>
-                Analyze
-            </button>
-
-            <RepoCard repo={repo} />
-            <LanguageChart languages={languages} />
-
-        </div>
-    );
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-4">
+      <input
+        type="text"
+        placeholder="https://github.com/facebook/react"
+        className="flex-1 p-4 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all text-white"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-semibold rounded-xl transition-colors shadow-lg shadow-blue-600/20"
+      >
+        Analyze
+      </button>
+    </form>
+  );
 }
 
 export default SearchBox;
