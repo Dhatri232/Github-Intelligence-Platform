@@ -1,10 +1,10 @@
 const express = require("express");
-const { HfInference } = require("@huggingface/inference");
-const GitHubService = require("../services/githubService");
 
+const GitHubService = require("../services/githubService");
+const aiService = require("../services/aiService");
 const router = express.Router();
 
-const hf = new HfInference(process.env.HF_TOKEN);
+
 const githubService = new GitHubService(process.env.GITHUB_TOKEN || "");
 
 router.get("/repo/:owner/:repo", async (req, res) => {
@@ -106,41 +106,36 @@ router.post("/analyze/:owner/:repo", async (req, res) => {
   try {
     const { owner, repo } = req.params;
 
+    const repoInfo = await githubService.getRepository(owner, repo);
     const readme = await githubService.getReadme(owner, repo);
-    const truncated = readme.substring(0, 3000);
 
-    if (!truncated) {
-      return res.json({
-        analysis:
-          "No README found. This repository appears to be minimal or undocumented.",
-      });
-    }
+    console.log("Starting AI analysis...");
+    const analysis = await aiService.analyzeRepository({
+      name: repoInfo.name,
+      description: repoInfo.description || "",
+      language: repoInfo.language || "",
+      topics: repoInfo.topics || [],
+      stars: repoInfo.stargazers_count,
+      forks: repoInfo.forks_count,
+      watchers: repoInfo.watchers_count,
+      issues: repoInfo.open_issues_count,
+      license: repoInfo.license?.name || "None",
+      size: repoInfo.size,
+      createdAt: repoInfo.created_at,
+      updatedAt: repoInfo.updated_at,
+      readme,
+    });
+console.log("AI Result:", analysis);
 
-    const prompt = `You are a senior software engineer. Analyze this GitHub README and provide:
-1. Project Purpose (1-2 sentences)
-2. Key Features (3-5 bullet points)
-3. Tech Stack (comma-separated)
-4. Code Quality Assessment (1 sentence)
-
-Keep it concise and professional.
-
-README:
-${truncated}`;
-
-    const aiResponse = await hf.textGeneration({
-      model: "mistralai/Mistral-7B-Instruct-v0.3",
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: 300,
-        temperature: 0.7,
-      },
+    res.json({
+      analysis,
     });
 
-    res.json({ analysis: aiResponse.generated_text });
-  } catch (error) {
-    console.error("AI Analysis error:", error);
+  } catch (err) {
+    console.error(err);
+
     res.status(500).json({
-      analysis: "AI analysis unavailable. Please try again later.",
+      analysis: "AI analysis unavailable.",
     });
   }
 });

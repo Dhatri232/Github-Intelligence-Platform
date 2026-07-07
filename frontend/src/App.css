@@ -198,3 +198,164 @@
     padding: 80px 20px;
   }
 }
+/* ===============================
+   AI Analysis
+================================= */
+
+.analysis-content{
+    background:#ffffff;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    max-height:75vh;
+    overflow-y:auto;
+}
+
+.analysis-text{
+    color:#374151;
+    line-height:1.8;
+    font-size:16px;
+}
+
+.analysis-text h1{
+    color:#2563eb;
+    font-size:30px;
+    margin:35px 0 20px;
+}
+
+.analysis-text h2{
+    color:#111827;
+    margin-top:30px;
+    margin-bottom:15px;
+}
+
+.analysis-text h3{
+    margin-top:25px;
+}
+
+.analysis-text p{
+    margin-bottom:16px;
+}
+
+.analysis-text ul{
+    padding-left:22px;
+}
+
+.analysis-text li{
+    margin-bottom:10px;
+}
+
+.analysis-text code{
+    background:#f3f4f6;
+    padding:3px 6px;
+    border-radius:5px;
+}
+
+.analysis-text pre{
+    background:#111827;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    overflow-x:auto;
+}
+
+.analysis-text table{
+    width:100%;
+    border-collapse:collapse;
+    margin:20px 0;
+}
+
+.analysis-text th,
+.analysis-text td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+.analysis-text blockquote{
+    border-left:4px solid #2563eb;
+    padding-left:15px;
+    color:#555;
+}
+.analysis-page{
+padding:30px;
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+
+.analysis-header{
+padding:25px;
+border-radius:16px;
+background:#111827;
+border:1px solid #1f2937;
+}
+
+.analysis-header h2{
+font-size:28px;
+margin-bottom:8px;
+color:white;
+}
+
+.analysis-header p{
+color:#9ca3af;
+}
+
+.analysis-card{
+background:#111827;
+border-radius:18px;
+padding:30px;
+border:1px solid #1f2937;
+line-height:1.9;
+}
+
+.analysis-card h1{
+font-size:30px;
+margin:35px 0 20px;
+color:white;
+border-bottom:1px solid #2d3748;
+padding-bottom:12px;
+}
+
+.analysis-card h2{
+font-size:24px;
+margin-top:40px;
+color:#60a5fa;
+}
+
+.analysis-card h3{
+font-size:20px;
+margin-top:30px;
+color:#93c5fd;
+}
+
+.analysis-card p{
+color:#d1d5db;
+margin:12px 0;
+}
+
+.analysis-card ul{
+padding-left:24px;
+}
+
+.analysis-card li{
+margin:10px 0;
+color:#d1d5db;
+
+}
+
+.analysis-card strong{
+color:white;
+
+}
+
+.analysis-card code{
+background:#1f2937;
+padding:4px 8px;
+border-radius:6px;
+}
+
+.analysis-card hr{
+border:none;
+border-top:1px solid #374151;
+margin:40px 0;
+}
