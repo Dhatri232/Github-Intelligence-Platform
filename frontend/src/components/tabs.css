@@ -1,0 +1,356 @@
+.empty-tab {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* Overview Tab */
+.tab-overview {
+  animation: fadeIn 0.3s ease;
+}
+
+.overview-header {
+  margin-bottom: 32px;
+}
+
+.overview-header h2 {
+  font-size: 32px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.repo-description {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.repo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.language-badge,
+.license-badge,
+.topic-tag {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.language-badge {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.topic-tag {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.repo-info {
+  margin-top: 24px;
+}
+
+.github-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Metrics Tab */
+.tab-metrics {
+  animation: fadeIn 0.3s ease;
+}
+
+.metrics-header h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metric-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  border-color: var(--accent-blue);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1);
+}
+
+.metric-card label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.languages-section {
+  margin-top: 32px;
+}
+
+.languages-section h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+.language-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.language-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.language-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.language-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.language-percent {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.language-bar {
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.language-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  transition: width 0.3s ease;
+}
+
+/* Contributors Tab */
+.tab-contributors h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+.contributors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contributor-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.contributor-card:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-tertiary);
+}
+
+.contributor-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contributor-info {
+  flex: 1;
+}
+
+.contributor-info h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.contributor-info p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.contributor-link {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.contributor-link:hover {
+  color: var(--accent-cyan);
+}
+
+/* Commits Tab */
+.tab-commits h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+.commits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.commit-card {
+  display: block;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.commit-card:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-tertiary);
+  transform: translateX(4px);
+}
+
+.commit-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.commit-hash {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  background: var(--bg-tertiary);
+  color: var(--accent-cyan);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.commit-author {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.commit-message {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.commit-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Analysis Tab */
+.tab-analysis h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+.analysis-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.analysis-text {
+  line-height: 1.8;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.loading-text {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .overview-header h2 {
+    font-size: 24px;
+  }
+
+  .stats-grid,
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commit-card {
+    padding: 12px;
+  }
+
+  .commit-message {
+    font-size: 13px;
+  }
+
+  .analysis-content {
+    padding: 16px;
+  }
+
+  .analysis-text {
+    font-size: 14px;
+  }
+}

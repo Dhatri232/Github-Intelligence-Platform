@@ -1,91 +1,108 @@
-import { useState } from "react";
-import SearchBox from "./components/SearchBox";
-import RepoCard from "./components/RepoCard";
+import { useState } from 'react';
+import { useRepository } from './hooks/useRepository';
+import SearchBox from './components/SearchBox';
+import Dashboard from './components/Dashboard';
+import SearchHistory from './components/SearchHistory';
+import './App.css';
 
 function App() {
-  const [repoData, setRepoData] = useState(null);
-  const [aiData, setAiData] = useState(null);
-  const [loadingRepo, setLoadingRepo] = useState(false);
-  const [loadingAi, setLoadingAi] = useState(false);
-  const [error, setError] = useState("");
+  const {
+    repoData,
+    aiAnalysis,
+    loading,
+    error,
+    searchHistory,
+    fetchRepository,
+    clearSearchHistory,
+  } = useRepository();
 
-  const handleSearch = async (url) => {
-    const urlParts = url.replace(/\/$/, "").split("/");
-    const repo = urlParts.pop();
-    const owner = urlParts.pop();
+  const [activeTab, setActiveTab] = useState('overview');
+  const [showHistory, setShowHistory] = useState(false);
 
-    if (!owner || !repo) {
-      setError("Please enter a valid GitHub repository URL.");
-      return;
-    }
+  const handleSearch = async (owner, repo) => {
+    setShowHistory(false);
+    setActiveTab('overview');
+    await fetchRepository(owner, repo);
+  };
 
-    setError("");
-    setRepoData(null);
-    setAiData(null);
-    setLoadingRepo(true);
-    setLoadingAi(true);
-
-    try {
-      const repoRes = await fetch("http://localhost:5000/api/repo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ owner, repo }),
-      });
-
-      if (!repoRes.ok) throw new Error("Repository not found.");
-      const repoJson = await repoRes.json();
-      setRepoData(repoJson);
-      setLoadingRepo(false);
-
-      const aiRes = await fetch("http://localhost:5000/api/ai-analysis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ owner, repo }),
-      });
-
-      if (aiRes.ok) {
-        const aiJson = await aiRes.json();
-        setAiData(aiJson.analysis);
-      } else {
-        setAiData("AI analysis is currently unavailable.");
-      }
-
-      setLoadingAi(false);
-    } catch (err) {
-      setError(err.message);
-      setLoadingRepo(false);
-      setLoadingAi(false);
-    }
+  const handleHistorySelect = (item) => {
+    handleSearch(item.owner, item.repo);
+    setShowHistory(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8 font-sans">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-            GitHub Intelligence
-          </h1>
-          <p className="text-gray-400">Analyze any repository with AI</p>
+    <div className="app-container">
+      <header className="app-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <div className="logo">GI</div>
+            <div>
+              <h1>GitHub Intelligence</h1>
+              <p>Advanced Repository Analytics with AI</p>
+            </div>
+          </div>
+          <button
+            className="history-btn"
+            onClick={() => setShowHistory(!showHistory)}
+            title="Search History"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main className="app-main">
+        <div className="search-container">
+          <SearchBox onSearch={handleSearch} loading={loading} />
+          {showHistory && (
+            <SearchHistory
+              history={searchHistory}
+              onSelect={handleHistorySelect}
+              onClear={clearSearchHistory}
+            />
+          )}
         </div>
 
-        <SearchBox onSearch={handleSearch} />
-
         {error && (
-          <div className="p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-200">
-            {error}
+          <div className="error-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
-        {loadingRepo && (
-          <div className="text-center animate-pulse text-blue-400">
-            Fetching repository data...
+        {loading && (
+          <div className="loading-container">
+            <div className="spinner" />
+            <p>Analyzing repository...</p>
           </div>
         )}
 
-        {repoData && (
-          <RepoCard repo={repoData} aiData={aiData} loadingAi={loadingAi} />
+        {repoData && !loading && (
+          <Dashboard
+            repoData={repoData}
+            aiAnalysis={aiAnalysis}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         )}
-      </div>
+
+        {!repoData && !loading && !error && (
+          <div className="empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.375 3.375 0 0 0-.975-2.438A3.365 3.365 0 0 0 16 13H8a3.365 3.365 0 0 0-2.025.575A3.375 3.375 0 0 0 5 3.013V9" />
+            </svg>
+            <h2>Enter a Repository</h2>
+            <p>Search for any GitHub repository to get started with analysis</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

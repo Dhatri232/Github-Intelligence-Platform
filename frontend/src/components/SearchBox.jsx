@@ -1,30 +1,73 @@
-import { useState } from "react";
+import { useState } from 'react';
+import './SearchBox.css';
 
-function SearchBox({ onSearch }) {
-  const [input, setInput] = useState("");
+export default function SearchBox({ onSearch, loading }) {
+  const [input, setInput] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (input.trim()) onSearch(input);
+    setError('');
+
+    const trimmed = input.trim();
+    if (!trimmed) {
+      setError('Please enter a repository URL or owner/repo');
+      return;
+    }
+
+    let owner, repo;
+
+    if (trimmed.includes('/')) {
+      const parts = trimmed.replace(/^(https?:\/\/)?(www\.)?github\.com\//i, '').split('/');
+      owner = parts[0];
+      repo = parts[1];
+    } else {
+      setError('Please use format: owner/repo');
+      return;
+    }
+
+    if (!owner || !repo) {
+      setError('Invalid format. Use: owner/repo');
+      return;
+    }
+
+    onSearch(owner, repo);
+    setInput('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-4">
-      <input
-        type="text"
-        placeholder="https://github.com/facebook/react"
-        className="flex-1 p-4 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all text-white"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button
-        type="submit"
-        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-semibold rounded-xl transition-colors shadow-lg shadow-blue-600/20"
-      >
-        Analyze
-      </button>
+    <form className="search-box" onSubmit={handleSubmit}>
+      <div className="search-input-wrapper">
+        <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search repositories... (e.g., vercel/next.js)"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          disabled={loading}
+          className="search-input"
+        />
+        <button type="submit" disabled={loading} className="search-button">
+          {loading ? (
+            <>
+              <span className="spinner-small" />
+              Searching...
+            </>
+          ) : (
+            <>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="5 12 19 12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+              Search
+            </>
+          )}
+        </button>
+      </div>
+      {error && <p className="search-error">{error}</p>}
     </form>
   );
 }
-
-export default SearchBox;
